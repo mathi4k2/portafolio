@@ -1,25 +1,24 @@
-import logo from './logo.svg';
+import React, { useState } from 'react';
+import Navbar from './components/Navbar';
+import IntroductionSection from './components/IntroductionSection';
 import './App.css';
+import ProductSection from './components/ProductSection';
 
 function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+    const [darkMode, setDarkMode] = useState(false);
+
+    const toggleDarkMode = () => {
+        setDarkMode(prevMode => !prevMode);
+    };
+
+    return (
+        <div className={`App ${darkMode ? 'dark' : 'light'}`}>
+            <Navbar darkMode={darkMode} toggleDarkMode={toggleDarkMode} />
+            <IntroductionSection darkMode={darkMode} />
+            <ProductSection darkMode={darkMode} />
+            {/* Otros componentes de productos que vendrán después */}
+        </div>
+    );
 }
 
 export default App;

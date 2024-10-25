@@ -1,0 +1,51 @@
+.introduction-section {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 20px 40px;
+    background-color: #f5f5f5; /* Color de fondo suave */
+}
+
+.text-content {
+    max-width: 60%;
+}
+
+.text-content h2 {
+    font-size: 1.8em;
+    margin-bottom: 10px;
+    color: #333;
+}
+
+.text-content p {
+    font-size: 1em;
+    color: #666;
+    line-height: 1.6;
+}
+
+.image-container {
+    max-width: 35%;
+}
+
+.shop-image {
+    width: 100%;
+    height: auto;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.introduction-section.light {
+    background-color: #f5f5f5;
+    color: #333;
+}
+
+.introduction-section.dark {
+    background-color: #333;
+    color: #f5f5f5;
+}
+.introduction-section.light h2 {
+    color: #333; /* Color del título en modo claro */
+}
+
+.introduction-section.dark h2 {
+    color: #f5f5f5; /* Color del título en modo oscuro */
+}

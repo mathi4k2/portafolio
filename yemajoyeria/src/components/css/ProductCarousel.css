@@ -1,0 +1,113 @@
+.product-carousel {
+    position: relative;
+    width: 80%;
+    margin: auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.product-carousel.light-mode {
+    background-color: #f8f9fa;
+    color: #333;
+}
+
+.product-carousel.dark-mode {
+    background-color: #333;
+    color: #f8f9fa;
+}
+
+.carousel-track {
+    overflow: hidden;
+    width: 100%;
+}
+
+.carousel-inner {
+    display: flex;
+    transition: transform 0.5s ease-in-out;
+}
+
+.product-card {
+    flex: 0 0 20%;
+    text-align: center;
+    padding: 10px;
+    box-sizing: border-box;
+    transition: all 0.5s ease;
+    background-color: inherit;
+    color: inherit;
+}
+
+.center-product {
+    transform: scale(1);
+    opacity: 1;
+    filter: blur(0);
+    z-index: 1;
+}
+
+.side-product {
+    transform: scale(0.9);
+    opacity: 0.7;
+    filter: blur(2px);
+    z-index: 0;
+}
+
+.far-side-product {
+    transform: scale(0.8);
+    opacity: 0.5;
+    filter: blur(4px);
+    z-index: 0;
+}
+
+.hidden {
+    display: none;
+}
+
+.product-image {
+    width: 100%;
+    height: auto;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.product-info {
+    margin-top: 10px;
+    font-size: 1rem;
+}
+
+.contact-link {
+    display: block;
+    margin-top: 5px;
+    text-decoration: underline;
+}
+
+.product-carousel.light-mode .contact-link {
+    color: #007bff;
+}
+
+.product-carousel.dark-mode .contact-link {
+    color: #a9d4ff;
+}
+
+.contact-link:hover {
+    opacity: 0.8;
+}
+
+.arrow {
+    font-size: 2em;
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: inherit;
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 10;
+}
+
+.arrow-left {
+    left: 10px;
+}
+
+.arrow-right {
+    right: 10px;
+}

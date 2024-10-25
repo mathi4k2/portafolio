@@ -36,3 +36,21 @@
     transform: rotate(360deg);
   }
 }
+.App.light {
+  background-color: #ffffff;
+  color: #333333;
+}
+
+.App.dark {
+  background-color: #333333;
+  color: #ffffff;
+}
+.navbar.light {
+  background-color: #f8f9fa; /* Color claro */
+  color: #333; /* Texto oscuro */
+}
+
+.navbar.dark {
+  background-color: #333; /* Color oscuro */
+  color: #f8f9fa; /* Texto claro */
+}
