@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import './css/Navbar.css';
 import logo from '../imgs/logo.png';
 
@@ -9,8 +10,8 @@ const Navbar = ({ darkMode, toggleDarkMode }) => {
                 <img src={logo} alt="Yemajoyería Logo" className="logo-img" />
             </div>
             <ul>
-                <li><a href="#">Inicio</a></li>
-                <li><a href="#">Catálogo</a></li>
+                <li><Link to="/">Inicio</Link></li>
+                <li><Link to="/inventario">Catálogo</Link></li>
                 <li><a href="#">Novedades</a></li>
                 <li><a href="#">Contacto</a></li>
             </ul>

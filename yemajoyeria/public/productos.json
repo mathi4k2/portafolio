@@ -1,0 +1,48 @@
+[
+    {
+      "id": 1,
+      "marca": "Rolex",
+      "malla": "metal",
+      "estilo": "elegante",
+      "nombre": "Rolex Datejust",
+      "precio": 7000,
+      "imagen": "https://via.placeholder.com/150"
+    },
+    {
+      "id": 2,
+      "marca": "Tudor",
+      "malla": "cuero",
+      "estilo": "deportivo",
+      "nombre": "Tudor Black Bay",
+      "precio": 3000,
+      "imagen": "https://via.placeholder.com/150"
+    },
+    {
+      "id": 3,
+      "marca": "Omega",
+      "malla": "metal",
+      "estilo": "elegante",
+      "nombre": "Omega Seamaster",
+      "precio": 5000,
+      "imagen": "https://via.placeholder.com/150"
+    },
+    {
+      "id": 4,
+      "marca": "Longines",
+      "malla": "cuero",
+      "estilo": "elegante",
+      "nombre": "Longines Master",
+      "precio": 1500,
+      "imagen": "https://via.placeholder.com/150"
+    },
+    {
+      "id": 5,
+      "marca": "Casio",
+      "malla": "cuero",
+      "estilo": "deportivo",
+      "nombre": "Casio G-Shock",
+      "precio": 200,
+      "imagen": "https://via.placeholder.com/150"
+    }
+  ]
+  

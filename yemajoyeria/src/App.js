@@ -1,23 +1,42 @@
-import React, { useState } from 'react';
-import Navbar from './components/Navbar';
+import React, { useState, useEffect } from 'react';
+import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+import Navbar from './components/Navbar.js';
 import IntroductionSection from './components/IntroductionSection';
-import './App.css';
 import ProductSection from './components/ProductSection';
+import Inventario from './components/Inventario';
+import './App.css';
 
 function App() {
-    const [darkMode, setDarkMode] = useState(false);
+    const [darkMode, setDarkMode] = useState(() => {
+        return localStorage.getItem('darkMode') === 'true';
+    });
 
     const toggleDarkMode = () => {
-        setDarkMode(prevMode => !prevMode);
+        setDarkMode(prevMode => {
+            const newMode = !prevMode;
+            localStorage.setItem('darkMode', newMode);
+            return newMode;
+        });
     };
 
     return (
-        <div className={`App ${darkMode ? 'dark' : 'light'}`}>
-            <Navbar darkMode={darkMode} toggleDarkMode={toggleDarkMode} />
-            <IntroductionSection darkMode={darkMode} />
-            <ProductSection darkMode={darkMode} />
-            {/* Otros componentes de productos que vendrán después */}
-        </div>
+        <Router>
+            <div className={`App ${darkMode ? 'dark' : 'light'}`}>
+                <Navbar darkMode={darkMode} toggleDarkMode={toggleDarkMode} />
+                <Routes>
+                    <Route
+                        path="/"
+                        element={
+                            <>
+                                <IntroductionSection darkMode={darkMode} />
+                                <ProductSection darkMode={darkMode} />
+                            </>
+                        }
+                    />
+                    <Route path="/inventario" element={<Inventario darkMode={darkMode} />} />
+                </Routes>
+            </div>
+        </Router>
     );
 }
 

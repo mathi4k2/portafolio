@@ -54,3 +54,14 @@
   background-color: #333; /* Color oscuro */
   color: #f8f9fa; /* Texto claro */
 }
+
+/* App.css */
+.inventario.dark {
+  background-color: #333333;
+  color: #ffffff;
+}
+
+.inventario.light {
+  background-color: #ffffff;
+  color: #333333;
+}
