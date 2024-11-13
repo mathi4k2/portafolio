@@ -1,5 +1,6 @@
-import React, { useState, useEffect } from 'react';
-import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+import React, { useState } from 'react';
+import { Route, Routes, useLocation } from 'react-router-dom';
+import { AnimatePresence, motion } from 'framer-motion'; // Para animaciones
 import Navbar from './components/Navbar.js';
 import IntroductionSection from './components/IntroductionSection';
 import ProductSection from './components/ProductSection';
@@ -19,24 +20,44 @@ function App() {
         });
     };
 
+    // Hook para obtener la ubicación actual
+    const location = useLocation();
+
     return (
-        <Router>
-            <div className={`App ${darkMode ? 'dark' : 'light'}`}>
-                <Navbar darkMode={darkMode} toggleDarkMode={toggleDarkMode} />
-                <Routes>
+        <div className={`App ${darkMode ? 'dark' : 'light'}`}>
+            <Navbar darkMode={darkMode} toggleDarkMode={toggleDarkMode} />
+            <AnimatePresence mode="wait">
+                <Routes location={location} key={location.pathname}>
                     <Route
                         path="/"
                         element={
-                            <>
+                            <motion.div
+                                initial={{ opacity: 0, x: -50 }}
+                                animate={{ opacity: 1, x: 0 }}
+                                exit={{ opacity: 0, x: 50 }}
+                                transition={{ duration: 0.5 }}
+                            >
                                 <IntroductionSection darkMode={darkMode} />
                                 <ProductSection darkMode={darkMode} />
-                            </>
+                            </motion.div>
                         }
                     />
-                    <Route path="/inventario" element={<Inventario darkMode={darkMode} />} />
+                    <Route
+                        path="/inventario"
+                        element={
+                            <motion.div
+                                initial={{ opacity: 0, y: 50 }}
+                                animate={{ opacity: 1, y: 0 }}
+                                exit={{ opacity: 0, y: -50 }}
+                                transition={{ duration: 0.5 }}
+                            >
+                                <Inventario darkMode={darkMode} />
+                            </motion.div>
+                        }
+                    />
                 </Routes>
-            </div>
-        </Router>
+            </AnimatePresence>
+        </div>
     );
 }
 

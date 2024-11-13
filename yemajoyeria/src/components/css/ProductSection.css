@@ -45,3 +45,11 @@
     color: inherit;
     margin-top: 20px;
 }
+.category-buttons {
+    display: flex;
+    justify-content: center; /* Centra horizontalmente */
+    align-items: center;    /* Centra verticalmente si es necesario */
+    gap: 20px;              /* Espaciado entre botones */
+    margin-bottom: 20px;
+    width: 100%;            /* Asegura que ocupe el espacio disponible */
+}

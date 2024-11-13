@@ -1,90 +1,126 @@
-// Inventario.js
 import React, { useState, useEffect } from 'react';
-import './css/Inventario.css'; // Importa el archivo CSS
+import './css/Inventario.css';
 
 const Inventario = ({ darkMode }) => {
-  const [productos, setProductos] = useState([]);
-  const [filtroMarca, setFiltroMarca] = useState('');
-  const [ordenPrecio, setOrdenPrecio] = useState('asc');
-  const [filtroMalla, setFiltroMalla] = useState('');
-  const [filtroEstilo, setFiltroEstilo] = useState('');
-  const [productosFiltrados, setProductosFiltrados] = useState([]);
+    const [productos, setProductos] = useState([]);
+    const [productosFiltrados, setProductosFiltrados] = useState([]);
+    const [categoriaActiva, setCategoriaActiva] = useState('relojes'); // Pestaña activa
+    const [filtros, setFiltros] = useState({
+        marca: '',
+        malla: '',
+        estilo: '',
+        precio: 'asc',
+    });
 
-  useEffect(() => {
-    // Carga el JSON de productos
-    fetch('/productos.json')
-      .then(response => response.json())
-      .then(data => {
-        setProductos(data);
-        setProductosFiltrados(data);
-      })
-      .catch(error => console.error('Error:', error));
-  }, []);
+    useEffect(() => {
+        fetch('/productos.json')
+            .then(response => response.json())
+            .then(data => {
+                setProductos(data);
+                setProductosFiltrados(data.filter(p => p.categoria === categoriaActiva));
+            })
+            .catch(error => console.error('Error:', error));
+    }, [categoriaActiva]);
 
-  useEffect(() => {
-    let productosActualizados = [...productos];
+    useEffect(() => {
+        const productosFiltrados = productos
+            .filter(producto => producto.categoria === categoriaActiva)
+            .filter(producto => !filtros.marca || producto.marca === filtros.marca)
+            .filter(producto => !filtros.malla || producto.malla === filtros.malla)
+            .filter(producto => !filtros.estilo || producto.estilo === filtros.estilo)
+            .sort((a, b) => (filtros.precio === 'asc' ? a.precio - b.precio : b.precio - a.precio));
+        setProductosFiltrados(productosFiltrados);
+    }, [filtros, productos, categoriaActiva]);
 
-    if (filtroMarca) {
-      productosActualizados = productosActualizados.filter(producto => producto.marca === filtroMarca);
-    }
-    if (filtroMalla) {
-      productosActualizados = productosActualizados.filter(producto => producto.malla === filtroMalla);
-    }
-    if (filtroEstilo) {
-      productosActualizados = productosActualizados.filter(producto => producto.estilo === filtroEstilo);
-    }
-    if (ordenPrecio === 'asc') {
-      productosActualizados.sort((a, b) => a.precio - b.precio);
-    } else {
-      productosActualizados.sort((a, b) => b.precio - a.precio);
-    }
+    const cambiarCategoria = (categoria) => {
+        setCategoriaActiva(categoria);
+        setFiltros({ marca: '', malla: '', estilo: '', precio: 'asc' }); // Resetea filtros al cambiar
+    };
 
-    setProductosFiltrados(productosActualizados);
-  }, [filtroMarca, ordenPrecio, filtroMalla, filtroEstilo, productos]);
+    return (
+        <div className={`inventario ${darkMode ? 'dark' : 'light'}`}>
+            {/* Botones de categoría */}
+            <div className="category-buttons">
+                <button
+                    className={`category-button ${categoriaActiva === 'relojes' ? 'active' : ''} ${darkMode ? 'dark' : 'light'}`}
+                    onClick={() => cambiarCategoria('relojes')}
+                >
+                    Relojes
+                </button>
+                <button
+                    className={`category-button ${categoriaActiva === 'joyas' ? 'active' : ''} ${darkMode ? 'dark' : 'light'}`}
+                    onClick={() => cambiarCategoria('joyas')}
+                >
+                    Joyas
+                </button>
+            </div>
 
-  return (
-    <div className={`inventario ${darkMode ? 'dark' : 'light'}`}>
-      <div className="filtros">
-        <select onChange={(e) => setFiltroMarca(e.target.value)}>
-          <option value="">Marca</option>
-          <option value="Rolex">Rolex</option>
-          <option value="Tudor">Tudor</option>
-          <option value="Omega">Omega</option>
-          <option value="Longines">Longines</option>
-          <option value="Casio">Casio</option>
-        </select>
+            {/* Filtros dinámicos */}
+            <div className="filtros">
+                {categoriaActiva === 'relojes' && (
+                    <>
+                        <select onChange={(e) => setFiltros({ ...filtros, marca: e.target.value })}>
+                            <option value="">Marca</option>
+                            <option value="Rolex">Rolex</option>
+                            <option value="Tudor">Tudor</option>
+                            <option value="Omega">Omega</option>
+                            <option value="Longines">Longines</option>
+                            <option value="Casio">Casio</option>
+                        </select>
+                        <select onChange={(e) => setFiltros({ ...filtros, malla: e.target.value })}>
+                            <option value="">Malla</option>
+                            <option value="metal">Metal</option>
+                            <option value="cuero">Cuero</option>
+                            <option value="otro">Otro</option>
+                        </select>
+                        <select onChange={(e) => setFiltros({ ...filtros, estilo: e.target.value })}>
+                            <option value="">Estilo</option>
+                            <option value="elegante">Elegante</option>
+                            <option value="deportivo">Deportivo</option>
+                        </select>
+                    </>
+                )}
+                {categoriaActiva === 'joyas' && (
+                    <>
+                        <select onChange={(e) => setFiltros({ ...filtros, tipo: e.target.value })}>
+                            <option value="">Tipo</option>
+                            <option value="anillo">Anillo</option>
+                            <option value="collar">Collar</option>
+                            <option value="pulsera">Pulsera</option>
+                            <option value="arete">Arete</option>
+                        </select>
+                        <select onChange={(e) => setFiltros({ ...filtros, material: e.target.value })}>
+                            <option value="">Material</option>
+                            <option value="oro">Oro</option>
+                            <option value="plata">Plata</option>
+                            <option value="acero">Acero</option>
+                        </select>
+                        <select onChange={(e) => setFiltros({ ...filtros, estilo: e.target.value })}>
+                            <option value="">Estilo</option>
+                            <option value="elegante">Elegante</option>
+                            <option value="casual">Casual</option>
+                        </select>
+                    </>
+                )}
+                <select onChange={(e) => setFiltros({ ...filtros, precio: e.target.value })}>
+                    <option value="asc">Precio: Menor a Mayor</option>
+                    <option value="desc">Precio: Mayor a Menor</option>
+                </select>
+            </div>
 
-        <select onChange={(e) => setFiltroMalla(e.target.value)}>
-          <option value="">Malla</option>
-          <option value="metal">Metal</option>
-          <option value="cuero">Cuero</option>
-          <option value="otro">Otro</option>
-        </select>
-
-        <select onChange={(e) => setFiltroEstilo(e.target.value)}>
-          <option value="">Estilo</option>
-          <option value="elegante">Elegante</option>
-          <option value="deportivo">Deportivo</option>
-        </select>
-
-        <select onChange={(e) => setOrdenPrecio(e.target.value)}>
-          <option value="asc">Precio: Menor a Mayor</option>
-          <option value="desc">Precio: Mayor a Menor</option>
-        </select>
-      </div>
-
-      <div className="productos-grid">
-        {productosFiltrados.map(producto => (
-          <div key={producto.id} className="producto">
-            <img src={producto.imagen} alt={producto.nombre} />
-            <h3>{producto.marca}</h3>
-            <p>{producto.nombre}</p>
-            <p>{producto.precio} €</p>
-          </div>
-        ))}
-      </div>
-    </div>
-  );
+            {/* Listado de productos */}
+            <div className="productos-grid">
+                {productosFiltrados.map(producto => (
+                    <div key={producto.id} className="producto">
+                        <img src={producto.imagen} alt={producto.nombre} />
+                        <h3>{producto.marca || producto.tipo}</h3>
+                        <p>{producto.nombre}</p>
+                        <p>{producto.precio} €</p>
+                    </div>
+                ))}
+            </div>
+        </div>
+    );
 };
 
 export default Inventario;
