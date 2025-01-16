@@ -12,15 +12,22 @@ const Inventario = ({ darkMode }) => {
         precio: 'asc',
     });
 
-    useEffect(() => {
-        fetch('/productos.json')
-            .then(response => response.json())
-            .then(data => {
-                setProductos(data);
-                setProductosFiltrados(data.filter(p => p.categoria === categoriaActiva));
-            })
-            .catch(error => console.error('Error:', error));
-    }, [categoriaActiva]);
+    fetch('https://docs.google.com/spreadsheets/d/1EIzoN40uaLzFxx13yT2ZX3XVBlNiiywOUdKtRBT-JjQ/gviz/tq?tqx=out:json')
+    .then(response => response.text())
+    .then(text => {
+        const json = JSON.parse(text.substr(47).slice(0, -2)); // Ajusta para eliminar el encabezado no deseado
+        const productos = json.table.rows.map(row => ({
+            id: row.c[0]?.v || '',
+            nombre: row.c[1]?.v || '',
+            precio: parseFloat(row.c[2]?.v || 0),
+            imagen: row.c[3]?.v || '',
+            categoria: row.c[4]?.v || '',
+        }));
+        setProductos(productos);
+        setProductosFiltrados(productos.filter(p => p.categoria === categoriaActiva));
+    })
+    .catch(error => console.error('Error:', error));
+
 
     useEffect(() => {
         const productosFiltrados = productos
