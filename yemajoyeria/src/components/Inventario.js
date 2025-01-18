@@ -9,6 +9,8 @@ const Inventario = ({ darkMode }) => {
         marca: '',
         malla: '',
         estilo: '',
+        tipo: '', // Agregado para joyas
+        material: '', // Agregado para joyas
         precio: 'asc',
     });
 
@@ -40,13 +42,22 @@ const Inventario = ({ darkMode }) => {
             .filter(producto => !filtros.marca || producto.marca === filtros.marca)
             .filter(producto => !filtros.malla || producto.malla === filtros.malla)
             .filter(producto => !filtros.estilo || producto.estilo === filtros.estilo)
+            .filter(producto => categoriaActiva === 'joyas' ? (!filtros.tipo || producto.tipo === filtros.tipo) : true)
+            .filter(producto => categoriaActiva === 'joyas' ? (!filtros.material || producto.material === filtros.material) : true)
             .sort((a, b) => (filtros.precio === 'asc' ? a.precio - b.precio : b.precio - a.precio));
         setProductosFiltrados(productosFiltrados);
     }, [productos, categoriaActiva, filtros]);
 
     const cambiarCategoria = (categoria) => {
         setCategoriaActiva(categoria);
-        setFiltros({ marca: '', malla: '', estilo: '', precio: 'asc' }); // Resetea filtros al cambiar
+        setFiltros({
+            marca: '',
+            malla: '',
+            estilo: '',
+            tipo: '', // Resetea filtros de joyas
+            material: '', // Resetea filtros de joyas
+            precio: 'asc',
+        });
     };
 
     return (
@@ -127,7 +138,7 @@ const Inventario = ({ darkMode }) => {
                         <img src={producto.imagen} alt={producto.nombre} />
                         <h3>{producto.marca || producto.tipo}</h3>
                         <p>{producto.nombre}</p>
-                        <p>{producto.precio} €</p>
+                        <p>{producto.precio} USD</p>
                     </div>
                 ))}
             </div>
