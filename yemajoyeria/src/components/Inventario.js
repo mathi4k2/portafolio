@@ -12,22 +12,27 @@ const Inventario = ({ darkMode }) => {
         precio: 'asc',
     });
 
-    fetch('https://docs.google.com/spreadsheets/d/1EIzoN40uaLzFxx13yT2ZX3XVBlNiiywOUdKtRBT-JjQ/gviz/tq?tqx=out:json')
-    .then(response => response.text())
-    .then(text => {
-        const json = JSON.parse(text.substr(47).slice(0, -2)); // Ajusta para eliminar el encabezado no deseado
-        const productos = json.table.rows.map(row => ({
-            id: row.c[0]?.v || '',
-            nombre: row.c[1]?.v || '',
-            precio: parseFloat(row.c[2]?.v || 0),
-            imagen: row.c[3]?.v || '',
-            categoria: row.c[4]?.v || '',
-        }));
-        setProductos(productos);
-        setProductosFiltrados(productos.filter(p => p.categoria === categoriaActiva));
-    })
-    .catch(error => console.error('Error:', error));
-
+    useEffect(() => {
+        fetch('https://docs.google.com/spreadsheets/d/1EIzoN40uaLzFxx13yT2ZX3XVBlNiiywOUdKtRBT-JjQ/gviz/tq?tqx=out:json')
+            .then(response => response.text())
+            .then(text => {
+                const json = JSON.parse(text.substr(47).slice(0, -2)); // Ajusta para eliminar el encabezado no deseado
+                const productos = json.table.rows.map(row => ({
+                    id: row.c[0]?.v || '',
+                    nombre: row.c[1]?.v || '',
+                    precio: parseFloat(row.c[2]?.v || 0),
+                    imagen: row.c[3]?.v || '',
+                    categoria: row.c[4]?.v || '',
+                    tipo: row.c[5]?.v || '',
+                    estilo: row.c[6]?.v || '',
+                    malla: row.c[7]?.v || '',
+                    material: row.c[8]?.v || '',
+                    marca: row.c[9]?.v || '',
+                }));
+                setProductos(productos);
+            })
+            .catch(error => console.error('Error:', error));
+    }, []);
 
     useEffect(() => {
         const productosFiltrados = productos
@@ -37,7 +42,7 @@ const Inventario = ({ darkMode }) => {
             .filter(producto => !filtros.estilo || producto.estilo === filtros.estilo)
             .sort((a, b) => (filtros.precio === 'asc' ? a.precio - b.precio : b.precio - a.precio));
         setProductosFiltrados(productosFiltrados);
-    }, [filtros, productos, categoriaActiva]);
+    }, [productos, categoriaActiva, filtros]);
 
     const cambiarCategoria = (categoria) => {
         setCategoriaActiva(categoria);
@@ -67,7 +72,7 @@ const Inventario = ({ darkMode }) => {
                 {categoriaActiva === 'relojes' && (
                     <>
                         <select onChange={(e) => setFiltros({ ...filtros, marca: e.target.value })}>
-                            <option value="">Marca</option>
+                            <option value="">Todas las marcas</option>
                             <option value="Rolex">Rolex</option>
                             <option value="Tudor">Tudor</option>
                             <option value="Omega">Omega</option>
@@ -75,13 +80,13 @@ const Inventario = ({ darkMode }) => {
                             <option value="Casio">Casio</option>
                         </select>
                         <select onChange={(e) => setFiltros({ ...filtros, malla: e.target.value })}>
-                            <option value="">Malla</option>
+                            <option value="">Todas las mallas</option>
                             <option value="metal">Metal</option>
                             <option value="cuero">Cuero</option>
                             <option value="otro">Otro</option>
                         </select>
                         <select onChange={(e) => setFiltros({ ...filtros, estilo: e.target.value })}>
-                            <option value="">Estilo</option>
+                            <option value="">Todos los estilos</option>
                             <option value="elegante">Elegante</option>
                             <option value="deportivo">Deportivo</option>
                         </select>
@@ -90,20 +95,20 @@ const Inventario = ({ darkMode }) => {
                 {categoriaActiva === 'joyas' && (
                     <>
                         <select onChange={(e) => setFiltros({ ...filtros, tipo: e.target.value })}>
-                            <option value="">Tipo</option>
+                            <option value="">Todos los tipos</option>
                             <option value="anillo">Anillo</option>
                             <option value="collar">Collar</option>
                             <option value="pulsera">Pulsera</option>
                             <option value="arete">Arete</option>
                         </select>
                         <select onChange={(e) => setFiltros({ ...filtros, material: e.target.value })}>
-                            <option value="">Material</option>
+                            <option value="">Todos los materiales</option>
                             <option value="oro">Oro</option>
                             <option value="plata">Plata</option>
                             <option value="acero">Acero</option>
                         </select>
                         <select onChange={(e) => setFiltros({ ...filtros, estilo: e.target.value })}>
-                            <option value="">Estilo</option>
+                            <option value="">Todos los estilos</option>
                             <option value="elegante">Elegante</option>
                             <option value="casual">Casual</option>
                         </select>

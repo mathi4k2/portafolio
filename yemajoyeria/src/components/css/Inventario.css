@@ -115,3 +115,10 @@
   margin-bottom: 20px;
   width: 100%;            /* Asegura que ocupe el espacio disponible */
 }
+
+.inventario img {
+  max-width: 100%; /* La imagen no será más grande que su contenedor */
+  height: auto;    /* Mantendrá la proporción */
+  object-fit: cover; /* Ajusta la imagen si es necesario */
+  max-height: 200px; /* Limita la altura máxima si es necesario */
+}
