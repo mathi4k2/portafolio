@@ -1,54 +1,64 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import './css/ProductSection.css';
 import ProductCarousel from './ProductCarousel';
 
-// Importa las imágenes de relojes y joyas
-import reloj1 from './carrusel/reloj1.png';
-import reloj2 from './carrusel/reloj2.png';
-import reloj3 from './carrusel/reloj3.png';
-import joya1 from './carrusel/joya1.png';
-import joya2 from './carrusel/joya2.png';
-import joya3 from './carrusel/joya3.png';
-
 const ProductSection = ({ darkMode }) => {
-    const [selectedCategory, setSelectedCategory] = useState('Relojes');
+    const [selectedCategory, setSelectedCategory] = useState('reloj');
+    const [images, setImages] = useState({ reloj: [], joya: [] });
 
     const handleCategoryChange = (category) => {
-        setSelectedCategory(category);
+        setSelectedCategory(category.toLowerCase()); // Normaliza a minúsculas
     };
 
-    // Define las imágenes de cada categoría usando las importaciones
-    const images = {
-        Relojes: [
-            { src: reloj1, link: 'https://wa.me/1234567890?text=Hola,%20estoy%20interesado%20en%20el%20reloj%201' },
-            { src: reloj2, link: 'https://wa.me/1234567890?text=Hola,%20estoy%20interesado%20en%20el%20reloj%202' },
-            { src: reloj3, link: 'https://wa.me/1234567890?text=Hola,%20estoy%20interesado%20en%20el%20reloj%203' },
-        ],
-        Joyas: [
-            { src: joya1, link: 'https://wa.me/1234567890?text=Hola,%20estoy%20interesado%20en%20la%20joya%201' },
-            { src: joya2, link: 'https://wa.me/1234567890?text=Hola,%20estoy%20interesado%20en%20la%20joya%202' },
-            { src: joya3, link: 'https://wa.me/1234567890?text=Hola,%20estoy%20interesado%20en%20la%20joya%203' },
-        ],
-    };
+    useEffect(() => {
+        const googleSheetUrl = 'https://docs.google.com/spreadsheets/d/1EIzoN40uaLzFxx13yT2ZX3XVBlNiiywOUdKtRBT-JjQ/gviz/tq?tqx=out:json&gid=2041518082';
+
+        fetch(googleSheetUrl)
+            .then(response => response.text())
+            .then(text => {
+                const json = JSON.parse(text.substr(47).slice(0, -2));
+                const imagesData = json.table.rows.map(row => ({
+                    id: row.c[0]?.v || '',
+                    src: row.c[1]?.v || '',
+                    description: row.c[2]?.v || '',
+                    tipo: row.c[3]?.v?.toLowerCase().trim() || '',
+                }));
+
+                // Categorización por tipo
+                const categorizedImages = imagesData.reduce(
+                    (acc, image) => {
+                        if (image.tipo === 'reloj') acc.reloj.push(image);
+                        if (image.tipo === 'joya') acc.joya.push(image);
+                        return acc;
+                    },
+                    { reloj: [], joya: [] }
+                );
+
+                setImages(categorizedImages);
+            })
+            .catch(error => console.error('Error al cargar los datos:', error));
+    }, []);
+
+    const imagesToDisplay = images[selectedCategory]; // Filtra las imágenes según la categoría seleccionada
 
     return (
         <section className="product-section">
             <div className="category-buttons">
                 <button 
-                    className={`category-button ${selectedCategory === 'Relojes' ? 'active' : ''} ${darkMode ? 'dark' : 'light'}`} 
-                    onClick={() => handleCategoryChange('Relojes')}
+                    className={`category-button ${selectedCategory === 'reloj' ? 'active' : ''} ${darkMode ? 'dark' : 'light'}`} 
+                    onClick={() => handleCategoryChange('reloj')}
                 >
                     Relojes
                 </button>
                 <button 
-                    className={`category-button ${selectedCategory === 'Joyas' ? 'active' : ''} ${darkMode ? 'dark' : 'light'}`} 
-                    onClick={() => handleCategoryChange('Joyas')}
+                    className={`category-button ${selectedCategory === 'joya' ? 'active' : ''} ${darkMode ? 'dark' : 'light'}`} 
+                    onClick={() => handleCategoryChange('joya')}
                 >
                     Joyas
                 </button>
             </div>
             <div className="product-display">
-                <ProductCarousel images={images[selectedCategory]} darkMode={darkMode} />
+                <ProductCarousel images={imagesToDisplay} darkMode={darkMode} />
             </div>
         </section>
     );
